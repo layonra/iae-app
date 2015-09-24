@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">IAE</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+
+    <string name="nomeTxt">Nome</string>
+    <string name="telefoneTxt">Telefone</string>
+    <string name="cadastrarTxt">Cadastrar</string>
+</resources>
