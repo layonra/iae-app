@@ -18,6 +18,7 @@ import lab.emerson.iae.R;
 import lab.emerson.iae.entity.Usuario;
 import lab.emerson.iae.util.Constantes;
 import lab.emerson.iae.util.CreateProtocol;
+import server.ClientServer;
 
 public class CadastrarUsuarioActivity extends AppCompatActivity {
 
@@ -49,6 +50,7 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
 
                     String message = CreateProtocol.generateProtocol(Constantes.PROCESS_A, usuario);
 
+                    //receiverMessage();
                     cadastrarUsuario(message);
                 }
             }
@@ -64,7 +66,9 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
 
                 try {
                     Log.i("UPE", "Entrou no método");
-                    Socket cs = new Socket(Constantes.IP_DNS, 1025);
+
+                    Socket cs = new Socket(Constantes.IP_DNS, 1026);
+
 
                     OutputStream out = cs.getOutputStream();
 
@@ -94,6 +98,27 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
 
         task.execute();
 
+    }
+
+
+    public void receiverMessage() {
+
+
+        AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
+
+            @Override
+            protected String doInBackground(Void... params) {
+
+                 return ClientServer.receiverMessage();
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+
+                Toast.makeText(getBaseContext(), s, Toast.LENGTH_SHORT).show();
+            }
+        };
+        task.execute();
     }
 
 }

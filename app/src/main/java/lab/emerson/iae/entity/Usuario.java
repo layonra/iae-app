@@ -5,7 +5,6 @@ public class Usuario {
 	private long id;
 	private String nome;
 	private String telefone;
-	private String ip;
 
 	Usuario() {
 
@@ -41,59 +40,27 @@ public class Usuario {
 		this.telefone = telefone;
 	}
 
-	public String getIp() {
-		return ip;
-	}
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
 
-	public void setIp(String ip) {
-		this.ip = ip;
+		Usuario usuario = (Usuario) o;
+
+		return id == usuario.id && !(nome != null ? !nome.equals(usuario.nome) : usuario.nome != null) && !(telefone != null ? !telefone.equals(usuario.telefone) : usuario.telefone != null);
+
 	}
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (int) (id ^ (id >>> 32));
-		result = prime * result + ((ip == null) ? 0 : ip.hashCode());
-		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
-		result = prime * result + ((telefone == null) ? 0 : telefone.hashCode());
+		int result = (int) (id ^ (id >>> 32));
+		result = 31 * result + (nome != null ? nome.hashCode() : 0);
+		result = 31 * result + (telefone != null ? telefone.hashCode() : 0);
 		return result;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof Usuario))
-			return false;
-		Usuario other = (Usuario) obj;
-		if (id != other.id)
-			return false;
-		if (ip == null) {
-			if (other.ip != null)
-				return false;
-		} else if (!ip.equals(other.ip))
-			return false;
-		if (nome == null) {
-			if (other.nome != null)
-				return false;
-		} else if (!nome.equals(other.nome))
-			return false;
-		if (telefone == null) {
-			if (other.telefone != null)
-				return false;
-		} else if (!telefone.equals(other.telefone))
-			return false;
-		return true;
-	}
-
-	@Override
 	public String toString() {
-		return "Usuario [id=" + id + ", nome=" + nome + ", telefone=" + telefone + ", ip=" + ip + "]";
+		return id + ";" + nome + ";" + telefone + ";";
 	}
-	
-	
-
 }

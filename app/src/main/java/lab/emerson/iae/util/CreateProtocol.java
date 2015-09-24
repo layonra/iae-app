@@ -7,6 +7,6 @@ public class CreateProtocol {
 
 
     public static String generateProtocol (String process, Usuario data) {
-        return process + ";" + data.toString();
+        return  data.toString();
     }
 }
