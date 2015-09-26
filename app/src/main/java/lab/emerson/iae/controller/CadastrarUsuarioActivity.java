@@ -4,19 +4,17 @@ package lab.emerson.iae.controller;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.net.Socket;
 
 import lab.emerson.iae.R;
 import lab.emerson.iae.entity.Usuario;
-import lab.emerson.iae.util.Constantes;
+import lab.emerson.iae.util.Socket;
+import lab.emerson.iae.util.URL;
 import lab.emerson.iae.util.CreateProtocol;
 import server.ClientServer;
 
@@ -37,7 +35,7 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(nome.getText().length() <= 0) {
+                if (nome.getText().length() <= 0) {
                     nome.setError("Preencha o campo!");
                     nome.requestFocus();
 
@@ -48,7 +46,7 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
 
                     Usuario usuario = new Usuario(nome.getText().toString(), telefone.getText().toString());
 
-                    String message = CreateProtocol.generateProtocol(Constantes.PROCESS_A, usuario);
+                    String message = CreateProtocol.generateProtocol(URL.PROCESSO.PROCESS_A, usuario);
 
                     //receiverMessage();
                     cadastrarUsuario(message);
@@ -64,35 +62,26 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
             @Override
             protected String doInBackground(Void... params) {
 
+                String data = "";
                 try {
-                    Log.i("UPE", "Entrou no método");
+                    data = Socket.sendDataUDP(message, URL.IP.IP_DNS, URL.PORTA.PORTA_DNS);
 
-                    Socket cs = new Socket(Constantes.IP_DNS, 1026);
+                    String[] s = data.split(":");
+                    String ip = s[0];
+                    String porta = s[1];
 
 
-                    OutputStream out = cs.getOutputStream();
+                } catch (IOException e) {
 
-                    Log.i("UPE", "Antes do for");
-
-                    for (int i = 0; i < message.length(); i++) {
-                        out.write((int) message.charAt(i));
-                    }
-
-                    Log.i("UPE", "Depois do for");
-                    cs.close();
-
-                }catch (IOException e) {
-                    Log.i("UPE", e.getMessage());
-                   // Toast.makeText(getBaseContext(), "Erro interno: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
 
-                return "ok";
+                return data;
             }
 
             @Override
             protected void onPostExecute(String s) {
 
-                Toast.makeText(getBaseContext(), "Cadastrado com sucesso!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), s, Toast.LENGTH_SHORT).show();
             }
         };
 
