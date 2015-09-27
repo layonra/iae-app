@@ -1,8 +1,9 @@
-package lab.emerson.iae.entity;
+package com.iae.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Usuario {
+public class Usuario implements Serializable {
 
 	private long id;
 	private String nome;

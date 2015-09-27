@@ -1,4 +1,4 @@
-package lab.emerson.iae.entity;
+package com.iae.entity;
 
 /**
  * @author layon

@@ -1,21 +1,20 @@
-package lab.emerson.iae.util;
+package com.iae.util;
 
-import android.util.Log;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.Socket;
 
+import com.iae.entity.Usuario;
+
 /**
  * Created by Emerson Oliveira on 26/09/15 at 16:58.
  *
  */
-public class SocketManagement {
+public class SocketManagement implements Serializable {
 
 
     public static String sendDataUDP (String message, String ip, int porta) throws IOException {
@@ -45,8 +44,18 @@ public class SocketManagement {
     }
 
 
-    public static void sendDataTCP (String message, String ip, int porta) throws IOException {
+    public static void sendDataTCP (Object object, String ip, int porta) throws IOException {
 
+        Socket cs = new Socket(ip, porta);
+        ObjectOutputStream os = new ObjectOutputStream(cs.getOutputStream());
+
+        os.writeObject(object);
+        os.flush();
+        os.close();
+
+        cs.close();
+
+        /*
         Socket cs = new Socket(ip, porta);
 
 
@@ -60,6 +69,7 @@ public class SocketManagement {
 
         Log.i("UPE", "Depois do for");
         cs.close();
+        */
 
     }
 }

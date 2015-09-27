@@ -1,4 +1,4 @@
-package lab.emerson.iae.controller;
+package com.iae.controller;
 
 
 import android.os.AsyncTask;
@@ -12,12 +12,10 @@ import android.widget.Toast;
 
 import java.io.IOException;
 
-import lab.emerson.iae.R;
-import lab.emerson.iae.entity.Usuario;
-import lab.emerson.iae.util.SocketManagement;
-import lab.emerson.iae.util.URL;
-import lab.emerson.iae.util.CreateProtocol;
-import server.ClientServer;
+import com.iae.R;
+import com.iae.entity.Usuario;
+import com.iae.util.SocketManagement;
+import com.iae.util.URL;
 
 public class CadastrarUsuarioActivity extends AppCompatActivity {
 
@@ -56,17 +54,15 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
                     Usuario usuario = new Usuario(nome.getText().toString(), telefone.getText().toString(),
                             cidade.getText().toString(), estado.getText().toString(), null, null, null);
 
-                    //String message = CreateProtocol.generateProtocol(URL.PROCESSO.PROCESS_A, usuario);
 
-                    //receiverMessage();
-                    cadastrarUsuario(usuario.toString());
+                    cadastrarUsuario(usuario);
                 }
             }
         });
     }
 
 
-    public void cadastrarUsuario(final String message) {
+    public void cadastrarUsuario(final Usuario usuario) {
         AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
 
             @Override
@@ -85,7 +81,7 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
 
                     Log.i("UPE", p + "");
 
-                    SocketManagement.sendDataTCP(message, ip, porta);
+                    SocketManagement.sendDataTCP(usuario, ip, porta);
 
                 } catch (IOException e) {
 
@@ -103,27 +99,6 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
 
         task.execute();
 
-    }
-
-
-    public void receiverMessage() {
-
-
-        AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
-
-            @Override
-            protected String doInBackground(Void... params) {
-
-                 return ClientServer.receiverMessage();
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-
-                Toast.makeText(getBaseContext(), s, Toast.LENGTH_SHORT).show();
-            }
-        };
-        task.execute();
     }
 
 }

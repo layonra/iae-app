@@ -1,6 +1,6 @@
-package lab.emerson.iae.util;
+package com.iae.util;
 
-import lab.emerson.iae.entity.Usuario;
+import com.iae.entity.Usuario;
 
 
 public class CreateProtocol {

@@ -1,4 +1,4 @@
-package lab.emerson.iae.entity;
+package com.iae.entity;
 
 import java.util.List;
 
