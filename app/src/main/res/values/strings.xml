@@ -7,5 +7,8 @@
 
     <string name="nomeTxt">Nome</string>
     <string name="telefoneTxt">Telefone</string>
+    <string name="cidadeTxt">Cidade</string>
+    <string name="estadoTxt">Estado</string>
     <string name="cadastrarTxt">Cadastrar</string>
+
 </resources>

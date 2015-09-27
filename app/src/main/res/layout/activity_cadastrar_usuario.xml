@@ -27,11 +27,33 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-    <Button
-        android:layout_width="wrap_content"
+    <EditText
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/cadastrarTxt"
-        android:id="@+id/cadastrar_button"
+        android:id="@+id/cidade_edt"
+        android:hint="@string/cidadeTxt"
+        android:ems="10"
         android:layout_below="@+id/telefone_edt"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignRight="@+id/telefone_edt"
+        android:layout_alignEnd="@+id/telefone_edt" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/estado_edt"
+        android:hint="@string/estadoTxt"
+        android:ems="10"
+        android:layout_below="@+id/cidade_edt"
+        android:layout_alignRight="@+id/cidade_edt"
+        android:layout_alignEnd="@+id/cidade_edt" />
+
+
+     <Button
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="@string/cadastrarTxt"
+         android:id="@+id/cadastrar_button"
+         android:layout_below="@+id/estado_edt"
+         android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

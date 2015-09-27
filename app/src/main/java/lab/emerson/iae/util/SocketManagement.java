@@ -1,15 +1,21 @@
 package lab.emerson.iae.util;
 
+import android.util.Log;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.Socket;
 
 /**
  * Created by Emerson Oliveira on 26/09/15 at 16:58.
  *
  */
-public class Socket {
+public class SocketManagement {
 
 
     public static String sendDataUDP (String message, String ip, int porta) throws IOException {
@@ -35,6 +41,25 @@ public class Socket {
         //Fecha o pacote
         clientSocket.close();
 
-        return data;
+        return data.trim();
+    }
+
+
+    public static void sendDataTCP (String message, String ip, int porta) throws IOException {
+
+        Socket cs = new Socket(ip, porta);
+
+
+        OutputStream out = cs.getOutputStream();
+
+        Log.i("UPE", "Antes do for");
+
+        for (int i = 0; i < message.length(); i++) {
+            out.write((int) message.charAt(i));
+        }
+
+        Log.i("UPE", "Depois do for");
+        cs.close();
+
     }
 }
