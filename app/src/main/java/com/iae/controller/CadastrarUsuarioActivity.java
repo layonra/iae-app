@@ -13,7 +13,10 @@ import android.widget.Toast;
 import java.io.IOException;
 
 import com.iae.R;
+import com.iae.dao.TabelaServicoDAO;
+import com.iae.entity.TabelaServico;
 import com.iae.entity.Usuario;
+import com.iae.util.ServicoInexistenteException;
 import com.iae.util.SocketManagement;
 import com.iae.util.URL;
 
@@ -55,14 +58,28 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
                             cidade.getText().toString(), estado.getText().toString(), null, null, null);
 
 
-                    cadastrarUsuario(usuario);
+                    try {
+                        TabelaServicoDAO tabelaServicoDAO = new TabelaServicoDAO();
+
+                        tabelaServicoDAO.getConnectionInstance(getApplicationContext());
+
+                        TabelaServico ts = tabelaServicoDAO.buscar(URL.PROCESSO.PROCESS_A);
+
+                        cadastrarUsuario(usuario, ts);
+
+                    } catch (ServicoInexistenteException e) {
+                        cadastrarUsuario(usuario);
+                    }
+
+                    }
                 }
             }
-        });
-    }
+
+            );
+        }
 
 
-    public void cadastrarUsuario(final Usuario usuario) {
+    private void cadastrarUsuario(final Usuario usuario) {
         AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
 
             @Override
@@ -74,17 +91,56 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
 
                     Log.i("UPE", data);
 
+
                     String[] s = data.split(":");
                     String ip = s[0];
                     String p = s[1];
                     int porta = Integer.parseInt(p);
+
+                    TabelaServico ts = new TabelaServico(URL.PROCESSO.PROCESS_A, ip, porta);
+
+                    TabelaServicoDAO tabelaServicoDAO = new TabelaServicoDAO();
+
+                    tabelaServicoDAO.getConnectionInstance(getApplicationContext());
+
+                    tabelaServicoDAO.inserir(ts);
 
                     Log.i("UPE", p + "");
 
                     SocketManagement.sendDataTCP(usuario, ip, porta);
 
                 } catch (IOException e) {
+                    cadastrarUsuario(usuario);
+                }
 
+                return data;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+
+                Toast.makeText(getBaseContext(), s, Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        task.execute();
+
+    }
+
+    private void cadastrarUsuario (final Usuario usuario, final TabelaServico tabelaServico) {
+
+        AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
+
+            @Override
+            protected String doInBackground(Void... params) {
+
+                String data = "";
+                try {
+
+                    SocketManagement.sendDataTCP(usuario, tabelaServico.getIp(), tabelaServico.getPorta());
+
+                } catch (IOException e) {
+                    cadastrarUsuario(usuario, tabelaServico);
                 }
 
                 return data;
