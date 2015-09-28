@@ -107,7 +107,7 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
 
                     Log.i("UPE", p + "");
 
-                    SocketManagement.sendDataTCP(usuario, ip, porta);
+                    SocketManagement.sendDataTCP(usuario, ip, porta, 1);
 
                 } catch (IOException e) {
                     cadastrarUsuario(usuario);
@@ -137,7 +137,7 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
                 String data = "";
                 try {
 
-                    SocketManagement.sendDataTCP(usuario, tabelaServico.getIp(), tabelaServico.getPorta());
+                    SocketManagement.sendDataTCP(usuario, tabelaServico.getIp(), tabelaServico.getPorta(), 1);
 
                 } catch (IOException e) {
                     cadastrarUsuario(usuario, tabelaServico);

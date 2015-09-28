@@ -9,7 +9,7 @@ public class URL {
 
     public class IP {
         public static final String IP_DNS = "192.168.25.74";
-        public static final String ENDERECO_SERVIDOR_A = "localhost";
+        public static final String ENDERECO_SERVIDOR_A = "192.168.25.74";
 
     }
 

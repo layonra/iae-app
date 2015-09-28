@@ -1,5 +1,8 @@
 package com.iae.util;
 
+import android.util.Log;
+
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -7,8 +10,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.Socket;
-
-import com.iae.entity.Usuario;
+import java.util.List;
 
 /**
  * Created by Emerson Oliveira on 26/09/15 at 16:58.
@@ -44,11 +46,12 @@ public class SocketManagement implements Serializable {
     }
 
 
-    public static void sendDataTCP (Object object, String ip, int porta) throws IOException {
+    public static void sendDataTCP (Object object, String ip, int porta, int servicoId) throws IOException {
 
         Socket cs = new Socket(ip, porta);
         ObjectOutputStream os = new ObjectOutputStream(cs.getOutputStream());
 
+        os.write(servicoId);
         os.writeObject(object);
         os.flush();
         os.close();
@@ -70,6 +73,31 @@ public class SocketManagement implements Serializable {
         Log.i("UPE", "Depois do for");
         cs.close();
         */
+
+    }
+
+    public static void sendDataTCP (List<String> message, String ip, int porta, int servicoId) throws IOException {
+
+        Log.i("UPE", "Entrou no método");
+
+        Socket cs = new Socket(ip, porta);
+
+        DataOutputStream ds = new DataOutputStream(cs.getOutputStream());
+
+
+
+        ds.write(servicoId);
+
+        for(String s : message) {
+            ds.writeChars(s);
+        }
+
+        Log.i("UPE", "Escreveu");
+
+        ds.flush();
+        ds.close();
+
+        cs.close();
 
     }
 }

@@ -10,5 +10,6 @@
     <string name="cidadeTxt">Cidade</string>
     <string name="estadoTxt">Estado</string>
     <string name="cadastrarTxt">Cadastrar</string>
+    <string name="title_activity_login">LoginActivity</string>
 
 </resources>
