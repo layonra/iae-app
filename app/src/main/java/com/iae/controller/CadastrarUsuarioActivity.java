@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.List;
 
 import com.iae.R;
 import com.iae.dao.TabelaServicoDAO;
@@ -63,7 +64,7 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
 
                         tabelaServicoDAO.getConnectionInstance(getApplicationContext());
 
-                        TabelaServico ts = tabelaServicoDAO.buscar(URL.PROCESSO.PROCESS_A);
+                        TabelaServico ts = tabelaServicoDAO.buscar(URL.PROCESSO.PROCESSO_A);
 
                         cadastrarUsuario(usuario, ts);
 
@@ -87,7 +88,7 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
 
                 String data = "";
                 try {
-                    data = SocketManagement.sendDataUDP(URL.PROCESSO.PROCESS_A, URL.IP.IP_DNS, URL.PORTA.PORTA_DNS);
+                    data = SocketManagement.sendDataUDP(URL.PROCESSO.PROCESSO_A, URL.IP.IP_DNS, URL.PORTA.PORTA_DNS);
 
                     Log.i("UPE", data);
 
@@ -97,7 +98,7 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
                     String p = s[1];
                     int porta = Integer.parseInt(p);
 
-                    TabelaServico ts = new TabelaServico(URL.PROCESSO.PROCESS_A, ip, porta);
+                    TabelaServico ts = new TabelaServico(URL.PROCESSO.PROCESSO_A, ip, porta);
 
                     TabelaServicoDAO tabelaServicoDAO = new TabelaServicoDAO();
 
@@ -106,6 +107,8 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
                     tabelaServicoDAO.inserir(ts);
 
                     Log.i("UPE", p + "");
+
+
 
                     SocketManagement.sendDataTCP(usuario, ip, porta, 1);
 

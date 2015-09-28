@@ -19,6 +19,8 @@ public class URL {
     }
 
     public class PROCESSO {
-        public static final String PROCESS_A = "CADASTRARUSUARIO";
+        public static final String PROCESSO_A = "CADASTRARUSUARIO";
+        public static final int PROCESSO_A_NUMERO = 1;
+
     }
 }

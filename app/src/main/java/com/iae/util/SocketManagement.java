@@ -52,6 +52,9 @@ public class SocketManagement implements Serializable {
         ObjectOutputStream os = new ObjectOutputStream(cs.getOutputStream());
 
         os.write(servicoId);
+        os.flush();
+        os.close();
+
         os.writeObject(object);
         os.flush();
         os.close();
