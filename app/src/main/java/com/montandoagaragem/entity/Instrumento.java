@@ -1,24 +1,25 @@
-package com.iae.entity;
+package com.montandoagaragem.entity;
 
 /**
  * @author layon
  */
-public class SubGeneroMusical {
+public class Instrumento {
 	private long id;
 	private String nome;
-	
-	public SubGeneroMusical() {
-	
+
+	public Instrumento() {
+
 	}
 
-	public SubGeneroMusical(String nome) {
+	public Instrumento(String nome) {
+		super();
 		this.nome = nome;
 	}
 
 	public long getId() {
 		return id;
 	}
-	
+
 	public String getNome() {
 		return nome;
 	}
@@ -44,7 +45,7 @@ public class SubGeneroMusical {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		SubGeneroMusical other = (SubGeneroMusical) obj;
+		Instrumento other = (Instrumento) obj;
 		if (id != other.id)
 			return false;
 		if (nome == null) {
@@ -57,14 +58,7 @@ public class SubGeneroMusical {
 
 	@Override
 	public String toString() {
-		return "SubGeneroMusical [id=" + id + ", nome=" + nome + "]";
+		return "Instrumento [id=" + id + ", nome=" + nome + "]";
 	}
 	
-	
-	
-	
-	
-	
-	
-
 }

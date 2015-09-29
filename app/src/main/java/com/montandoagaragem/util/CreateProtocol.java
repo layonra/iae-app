@@ -1,6 +1,6 @@
-package com.iae.util;
+package com.montandoagaragem.util;
 
-import com.iae.entity.Usuario;
+import com.montandoagaragem.entity.Usuario;
 
 
 public class CreateProtocol {

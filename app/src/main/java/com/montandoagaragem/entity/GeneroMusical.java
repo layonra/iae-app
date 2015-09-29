@@ -1,4 +1,4 @@
-package com.iae.entity;
+package com.montandoagaragem.entity;
 
 import java.util.List;
 

@@ -5,4 +5,14 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="Theme.montandoagaragem" parent="Base.AppTheme"/>
+
+    <style name="Base.AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/brown_light</item>
+        <item name="colorPrimaryDark">@color/brown_dark</item>
+        <item name="colorAccent">@color/branco</item>
+
+        <item name="android:windowBackground">@color/branco</item>
+    </style>
+
 </resources>

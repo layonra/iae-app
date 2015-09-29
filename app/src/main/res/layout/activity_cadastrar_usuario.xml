@@ -1,59 +1,116 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".MainActivity"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/brown_light"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="35sp"
         android:inputType="textPersonName"
         android:hint="@string/nomeTxt"
+        android:background="@drawable/shape_fields"
         android:ems="10"
         android:id="@+id/nome_edt"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_marginTop="10dp" />
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="35sp"
         android:inputType="phone"
         android:hint="@string/telefoneTxt"
         android:ems="10"
         android:id="@+id/telefone_edt"
-        android:layout_below="@+id/nome_edt"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:background="@drawable/shape_fields"
+        android:layout_marginTop="10dp" />
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="30sp"
+        android:inputType="textEmailAddress"
+        android:hint="@string/emailTxt"
+        android:ems="10"
+        android:id="@+id/email_edt"
+        android:background="@drawable/shape_fields"
+        android:layout_marginTop="10dp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="35sp"
+        android:inputType="textPassword"
+        android:hint="@string/senhaTxt"
+        android:ems="10"
+        android:id="@+id/senha_edt"
+        android:background="@drawable/shape_fields"
+        android:layout_marginTop="10dp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="35sp"
+        android:inputType="text"
+        android:hint="@string/generoTxt"
+        android:ems="10"
+        android:id="@+id/genero_edt"
+        android:background="@drawable/shape_fields"
+        android:layout_marginTop="10dp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="35sp"
+        android:inputType="text"
+        android:hint="@string/subGeneroTxt"
+        android:ems="10"
+        android:id="@+id/sub_genero_edt"
+        android:background="@drawable/shape_fields"
+        android:layout_marginTop="10dp" />
+
+
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="35sp"
         android:id="@+id/cidade_edt"
         android:hint="@string/cidadeTxt"
+        android:background="@drawable/shape_fields"
         android:ems="10"
-        android:layout_below="@+id/telefone_edt"
-        android:layout_alignRight="@+id/telefone_edt"
-        android:layout_alignEnd="@+id/telefone_edt" />
+        android:layout_marginTop="10dp" />
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="35sp"
         android:id="@+id/estado_edt"
         android:hint="@string/estadoTxt"
+        android:background="@drawable/shape_fields"
         android:ems="10"
-        android:layout_below="@+id/cidade_edt"
-        android:layout_alignRight="@+id/cidade_edt"
-        android:layout_alignEnd="@+id/cidade_edt" />
+        android:layout_marginTop="10dp" />
 
 
      <Button
-         android:layout_width="wrap_content"
+         android:layout_width="match_parent"
          android:layout_height="wrap_content"
          android:text="@string/cadastrarTxt"
+         android:textColor="@color/branco"
          android:id="@+id/cadastrar_button"
-         android:layout_below="@+id/estado_edt"
-         android:layout_centerHorizontal="true" />
+         android:background="@drawable/shape_button"
+         android:layout_marginTop="20dp"/>
 
-</RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

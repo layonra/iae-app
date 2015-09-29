@@ -1,4 +1,4 @@
-package com.iae.entity;
+package com.montandoagaragem.entity;
 
 /**
  * Created by Emerson Oliveira on 27/09/15 at 16:23.

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.iae" >
+    package="com.montandoagaragem" >
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -8,10 +8,13 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/Theme.montandoagaragem" >
         <activity
             android:name=".controller.CadastrarUsuarioActivity"
             android:label="@string/app_name" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".controller.LoginActivity" />
         </activity>
         <activity
             android:name=".controller.LoginActivity"

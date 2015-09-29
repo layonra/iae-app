@@ -1,4 +1,4 @@
-package com.iae.util;
+package com.montandoagaragem.util;
 
 import android.util.Log;
 
@@ -46,14 +46,10 @@ public class SocketManagement implements Serializable {
     }
 
 
-    public static void sendDataTCP (Object object, String ip, int porta, int servicoId) throws IOException {
+    public static void sendDataTCP (Object object, String ip, int porta) throws IOException {
 
         Socket cs = new Socket(ip, porta);
         ObjectOutputStream os = new ObjectOutputStream(cs.getOutputStream());
-
-        os.write(servicoId);
-        os.flush();
-        os.close();
 
         os.writeObject(object);
         os.flush();

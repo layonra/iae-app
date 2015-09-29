@@ -1,9 +1,11 @@
-package com.iae.controller;
+package com.montandoagaragem.controller;
 
 
 import android.os.AsyncTask;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -11,22 +13,33 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import java.io.IOException;
-import java.util.List;
 
-import com.iae.R;
-import com.iae.dao.TabelaServicoDAO;
-import com.iae.entity.TabelaServico;
-import com.iae.entity.Usuario;
-import com.iae.util.ServicoInexistenteException;
-import com.iae.util.SocketManagement;
-import com.iae.util.URL;
+import com.montandoagaragem.R;
+import com.montandoagaragem.dao.TabelaServicoDAO;
+import com.montandoagaragem.entity.TabelaServico;
+import com.montandoagaragem.entity.Usuario;
+import com.montandoagaragem.util.ServicoInexistenteException;
+import com.montandoagaragem.util.SocketManagement;
+import com.montandoagaragem.util.URL;
 
 public class CadastrarUsuarioActivity extends AppCompatActivity {
+
+    public static int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastrar_usuario);
+
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar ab = getSupportActionBar();
+
+        if (ab != null) {
+            ab.setDisplayHomeAsUpEnabled(true);
+            ab.setTitle("Cadastrar Usuário");
+        }
 
 
         final EditText nome = (EditText) findViewById(R.id.nome_edt);
@@ -104,13 +117,20 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
 
                     tabelaServicoDAO.getConnectionInstance(getApplicationContext());
 
-                    tabelaServicoDAO.inserir(ts);
+                    try {
+                        tabelaServicoDAO.buscar(URL.PROCESSO.PROCESSO_A);
+
+                        tabelaServicoDAO.getConnectionInstance(getApplicationContext());
+                        tabelaServicoDAO.editar(ts);
+                        SocketManagement.sendDataTCP(usuario, ip, porta);
+                        Log.i("UPE", "Editou!");
+
+                    }catch (ServicoInexistenteException e) {
+                        tabelaServicoDAO.inserir(ts);
+                        SocketManagement.sendDataTCP(usuario, ip, porta);
+                    }
 
                     Log.i("UPE", p + "");
-
-
-
-                    SocketManagement.sendDataTCP(usuario, ip, porta, 1);
 
                 } catch (IOException e) {
                     cadastrarUsuario(usuario);
@@ -132,6 +152,8 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
 
     private void cadastrarUsuario (final Usuario usuario, final TabelaServico tabelaServico) {
 
+        count ++;
+
         AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
 
             @Override
@@ -140,10 +162,15 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
                 String data = "";
                 try {
 
-                    SocketManagement.sendDataTCP(usuario, tabelaServico.getIp(), tabelaServico.getPorta(), 1);
+                    SocketManagement.sendDataTCP(usuario, tabelaServico.getIp(), tabelaServico.getPorta());
 
                 } catch (IOException e) {
-                    cadastrarUsuario(usuario, tabelaServico);
+                    if(count < 3) {
+                        cadastrarUsuario(usuario, tabelaServico);
+                    } else {
+                        Log.i("UPE", "Mais de três vezes");
+                        cadastrarUsuario(usuario);
+                    }
                 }
 
                 return data;

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">IAE</string>
+    <string name="app_name">Montando a Garagem</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -7,9 +7,16 @@
 
     <string name="nomeTxt">Nome</string>
     <string name="telefoneTxt">Telefone</string>
+    <string name="emailTxt">Email</string>
+    <string name="senhaTxt">Senha</string>
+    <string name="instrumentoTxt">Instrumento</string>
+    <string name="generoTxt">Gênero</string>
+    <string name="subGeneroTxt">Subgênero</string>
     <string name="cidadeTxt">Cidade</string>
     <string name="estadoTxt">Estado</string>
-    <string name="cadastrarTxt">Cadastrar</string>
-    <string name="title_activity_login">LoginActivity</string>
 
+    <string name="entrarTxt">Entrar</string>
+    <string name="cadastraseTxt">Cadastre-se</string>
+
+    <string name="cadastrarTxt">Cadastrar</string>
 </resources>

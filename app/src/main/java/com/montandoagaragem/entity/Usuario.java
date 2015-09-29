@@ -1,10 +1,11 @@
-package com.iae.entity;
+package com.montandoagaragem.entity;
 
 import java.io.Serializable;
 import java.util.List;
 
 public class Usuario implements Serializable {
 
+	private static final long serialVersionUID = -4678347457644872616L;
 	private long id;
 	private String nome;
 	private String telefone;

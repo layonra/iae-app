@@ -1,4 +1,4 @@
-package com.iae.util;
+package com.montandoagaragem.util;
 
 
 /**
@@ -20,7 +20,6 @@ public class URL {
 
     public class PROCESSO {
         public static final String PROCESSO_A = "CADASTRARUSUARIO";
-        public static final int PROCESSO_A_NUMERO = 1;
 
     }
 }

@@ -1,4 +1,4 @@
-package com.iae.dao;
+package com.montandoagaragem.dao;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,9 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.iae.connectionfactory.ConnectionFactorySQLite;
-import com.iae.entity.TabelaServico;
-import com.iae.util.ServicoInexistenteException;
+import com.montandoagaragem.connectionfactory.ConnectionFactorySQLite;
+import com.montandoagaragem.entity.TabelaServico;
+import com.montandoagaragem.util.ServicoInexistenteException;
 
 /**
  * Created by Emerson Oliveira on 27/09/15 at 16:21.
