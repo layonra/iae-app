@@ -2,7 +2,10 @@ package com.montandoagaragem.util;
 
 import android.util.Log;
 
+import com.montandoagaragem.entity.Usuario;
+
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
@@ -79,27 +82,37 @@ public class SocketManagement implements Serializable {
 
     }
 
-    public static void sendDataTCP (String message, String ip, int porta) throws IOException {
+    public static Usuario sendDataTCP (String message, String ip, int porta) throws IOException, UsuarioInexistenteException {
 
         Log.i("UPE", "Entrou no método");
 
         Socket cs = new Socket(ip, porta);
+        Usuario usuario;
 
         OutputStream out = cs.getOutputStream();
+        ObjectInputStream obj = new ObjectInputStream(cs.getInputStream());
 
         for (int i = 0; i < message.length(); i++) {
             out.write((int) message.charAt(i));
         }
-
-
 
         Log.i("UPE", "Escreveu");
 
         out.flush();
         out.close();
 
+        try {
+            usuario = (Usuario) obj.readObject();
+            obj.close();
+
+            Log.i("UPE", usuario + "");
+        } catch (ClassNotFoundException e) {
+            throw new UsuarioInexistenteException();
+        }
+
         cs.close();
 
+        return usuario;
     }
 
 

@@ -17,6 +17,7 @@ import com.montandoagaragem.util.ServicoInexistenteException;
 import com.montandoagaragem.util.SocketManagement;
 import com.montandoagaragem.util.TimeoutThread;
 import com.montandoagaragem.util.URL;
+import com.montandoagaragem.util.UsuarioInexistenteException;
 
 import java.io.IOException;
 
@@ -115,8 +116,17 @@ public class LoginActivity extends AppCompatActivity {
                             Log.i("UPE", "Editou!");
 
                         }catch (ServicoInexistenteException e) {
+
                             tabelaServicoDAO.inserir(ts);
-                            SocketManagement.sendDataTCP(email + ";" + senha, ts.getIp(), ts.getPorta());
+
+                            try {
+                                SocketManagement.sendDataTCP(email + ";" + senha, ts.getIp(), ts.getPorta());
+
+                            }catch (UsuarioInexistenteException u) {
+                                return "Usuario inexistente";
+                            }
+                        } catch (UsuarioInexistenteException e) {
+                            return "Usuario Inexistente";
                         }
 
                         Log.i("UPE", p + "");
@@ -132,7 +142,11 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             protected void onPostExecute(String s) {
 
-                Toast.makeText(getBaseContext(), s, Toast.LENGTH_SHORT).show();
+                if(s.equals("Error")) {
+                    Toast.makeText(getBaseContext(), "Sem conexão com o servidor. Tente novamente", Toast.LENGTH_SHORT).show();
+                } else if(s.equals("Usuario Inexistente")) {
+                    Toast.makeText(getBaseContext(), "Usuário inexistente no sistema!", Toast.LENGTH_SHORT).show();
+                }
             }
         };
 
@@ -157,6 +171,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 } catch (IOException e) {
                     return "Error";
+                } catch (UsuarioInexistenteException e) {
+                    return "Usuario Inexistente";
                 }
 
                 return data;
@@ -171,8 +187,8 @@ public class LoginActivity extends AppCompatActivity {
                         Log.i("UPE", "Mais de três vezes");
                         logar(email, senha);
                     }
-                } else {
-                    Toast.makeText(getBaseContext(), s, Toast.LENGTH_SHORT).show();
+                } else if(s.equals("Usuario Inexistente")) {
+                    Toast.makeText(getBaseContext(), "Usuário inexistente no sistema!", Toast.LENGTH_SHORT).show();
                 }
 
             }
