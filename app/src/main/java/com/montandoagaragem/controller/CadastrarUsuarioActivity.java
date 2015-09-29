@@ -20,6 +20,7 @@ import com.montandoagaragem.entity.TabelaServico;
 import com.montandoagaragem.entity.Usuario;
 import com.montandoagaragem.util.ServicoInexistenteException;
 import com.montandoagaragem.util.SocketManagement;
+import com.montandoagaragem.util.TimeoutThread;
 import com.montandoagaragem.util.URL;
 
 public class CadastrarUsuarioActivity extends AppCompatActivity {
@@ -44,9 +45,15 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
 
         final EditText nome = (EditText) findViewById(R.id.nome_edt);
         final EditText telefone = (EditText) findViewById(R.id.telefone_edt);
+        final EditText email = (EditText) findViewById(R.id.email_edt);
+        final EditText senha = (EditText) findViewById(R.id.senha_edt);
+        final EditText instrumento = (EditText) findViewById(R.id.instrumento_edt);
+        final EditText genero = (EditText) findViewById(R.id.genero_edt);
+        final EditText subGenero = (EditText) findViewById(R.id.sub_genero_edt);
         final EditText cidade = (EditText) findViewById(R.id.cidade_edt);
         final EditText estado = (EditText) findViewById(R.id.estado_edt);
-        final Button cadastrar = (Button) findViewById(R.id.cadastrar_button);
+
+        Button cadastrar = (Button) findViewById(R.id.cadastrar_button);
 
 
         cadastrar.setOnClickListener(new Button.OnClickListener() {
@@ -68,9 +75,11 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
                     estado.requestFocus();
                 } else {
 
-                    Usuario usuario = new Usuario(nome.getText().toString(), telefone.getText().toString(),
-                            cidade.getText().toString(), estado.getText().toString(), null, null, null);
+                    Usuario usuario = new Usuario(nome.getText().toString(), telefone.getText().toString(), email.getText().toString(),
+                            senha.getText().toString(), instrumento.getText().toString(), genero.getText().toString(), subGenero.getText().toString(),
+                            cidade.getText().toString(), estado.getText().toString());
 
+                    count = 0;
 
                     try {
                         TabelaServicoDAO tabelaServicoDAO = new TabelaServicoDAO();
@@ -94,47 +103,53 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
 
 
     private void cadastrarUsuario(final Usuario usuario) {
-        AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
 
+        AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
 
-                String data = "";
+                String data;
                 try {
+                    TimeoutThread timeoutThread = new TimeoutThread();
+
+                    Thread t = new Thread(timeoutThread);
+
+                    t.start();
                     data = SocketManagement.sendDataUDP(URL.PROCESSO.PROCESSO_A, URL.IP.IP_DNS, URL.PORTA.PORTA_DNS);
 
                     Log.i("UPE", data);
 
+                        String[] s = data.split(":");
+                        String ip = s[0];
+                        String p = s[1];
+                        int porta = Integer.parseInt(p);
 
-                    String[] s = data.split(":");
-                    String ip = s[0];
-                    String p = s[1];
-                    int porta = Integer.parseInt(p);
+                        TabelaServico ts = new TabelaServico(URL.PROCESSO.PROCESSO_A, ip, porta);
 
-                    TabelaServico ts = new TabelaServico(URL.PROCESSO.PROCESSO_A, ip, porta);
-
-                    TabelaServicoDAO tabelaServicoDAO = new TabelaServicoDAO();
-
-                    tabelaServicoDAO.getConnectionInstance(getApplicationContext());
-
-                    try {
-                        tabelaServicoDAO.buscar(URL.PROCESSO.PROCESSO_A);
+                        TabelaServicoDAO tabelaServicoDAO = new TabelaServicoDAO();
 
                         tabelaServicoDAO.getConnectionInstance(getApplicationContext());
-                        tabelaServicoDAO.editar(ts);
-                        SocketManagement.sendDataTCP(usuario, ip, porta);
-                        Log.i("UPE", "Editou!");
 
-                    }catch (ServicoInexistenteException e) {
-                        tabelaServicoDAO.inserir(ts);
-                        SocketManagement.sendDataTCP(usuario, ip, porta);
+                        try {
+                            tabelaServicoDAO.buscar(URL.PROCESSO.PROCESSO_A);
+
+                            tabelaServicoDAO.getConnectionInstance(getApplicationContext());
+                            tabelaServicoDAO.editar(ts);
+                            SocketManagement.sendDataTCP(usuario, ip, porta);
+                            Log.i("UPE", "Editou!");
+
+                        } catch (ServicoInexistenteException e) {
+                            tabelaServicoDAO.inserir(ts);
+                            SocketManagement.sendDataTCP(usuario, ip, porta);
+                        }
+
+                        Log.i("UPE", p + "");
+
+
+                    }catch(IOException e){
+                            return "Error";
                     }
 
-                    Log.i("UPE", p + "");
-
-                } catch (IOException e) {
-                    cadastrarUsuario(usuario);
-                }
 
                 return data;
             }
@@ -142,7 +157,11 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
             @Override
             protected void onPostExecute(String s) {
 
-                Toast.makeText(getBaseContext(), s, Toast.LENGTH_SHORT).show();
+                if(s.equals("Error")) {
+                    Log.i("UPE", s);
+                    Toast.makeText(getBaseContext(), "Sem conexão com o servidor. Tente novamente", Toast.LENGTH_SHORT).show();
+                }
+
             }
         };
 
@@ -165,12 +184,7 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
                     SocketManagement.sendDataTCP(usuario, tabelaServico.getIp(), tabelaServico.getPorta());
 
                 } catch (IOException e) {
-                    if(count < 3) {
-                        cadastrarUsuario(usuario, tabelaServico);
-                    } else {
-                        Log.i("UPE", "Mais de três vezes");
-                        cadastrarUsuario(usuario);
-                    }
+                    return "Error";
                 }
 
                 return data;
@@ -179,7 +193,16 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
             @Override
             protected void onPostExecute(String s) {
 
-                Toast.makeText(getBaseContext(), s, Toast.LENGTH_SHORT).show();
+                if (s.equals("Error")) {
+                    if(count < 2) {
+                        cadastrarUsuario(usuario, tabelaServico);
+                    } else {
+                        Log.i("UPE", "Mais de três vezes");
+                        cadastrarUsuario(usuario);
+                    }
+                } else {
+                    Toast.makeText(getBaseContext(), s, Toast.LENGTH_SHORT).show();
+                }
             }
         };
 
