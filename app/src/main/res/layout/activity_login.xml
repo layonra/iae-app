@@ -23,7 +23,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="35sp"
-        android:inputType="phone"
+        android:inputType="textEmailAddress"
         android:ems="10"
         android:background="@drawable/shape_fields"
         android:id="@+id/login_edt"
@@ -33,7 +33,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="35sp"
-        android:inputType="phone"
+        android:inputType="textPassword"
         android:background="@drawable/shape_fields"
         android:ems="10"
         android:id="@+id/senha_edt"

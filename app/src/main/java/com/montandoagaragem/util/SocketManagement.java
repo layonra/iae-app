@@ -2,15 +2,14 @@ package com.montandoagaragem.util;
 
 import android.util.Log;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.List;
 
 /**
  * Created by Emerson Oliveira on 26/09/15 at 16:58.
@@ -18,11 +17,13 @@ import java.util.List;
  */
 public class SocketManagement implements Serializable {
 
+    private static DatagramSocket clientSocket;
+
 
     public static String sendDataUDP (String message, String ip, int porta) throws IOException {
 
         //Prepara o socket para o envio de dados pela porta indicada
-        DatagramSocket clientSocket = new DatagramSocket();
+        clientSocket = new DatagramSocket();
         InetAddress IPAddress = InetAddress.getByName(ip);
         byte[] sendData = new byte[1024];
         byte[] receiveData = new byte[1024];
@@ -36,7 +37,10 @@ public class SocketManagement implements Serializable {
         //Aguarda a resposta do servidor(O ip relativo a URL enviada)
         DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
         clientSocket.receive(receivePacket);
-        //RETURN_FLAG = true;//Altera o valor caso algum dado seja recebido
+
+        TimeoutThread.FLAG = false;
+        Log.i("UPE", "Alterou a flag");
+
         String data = new String(receivePacket.getData());
 
         //Fecha o pacote
@@ -75,28 +79,31 @@ public class SocketManagement implements Serializable {
 
     }
 
-    public static void sendDataTCP (List<String> message, String ip, int porta, int servicoId) throws IOException {
+    public static void sendDataTCP (String message, String ip, int porta) throws IOException {
 
         Log.i("UPE", "Entrou no método");
 
         Socket cs = new Socket(ip, porta);
 
-        DataOutputStream ds = new DataOutputStream(cs.getOutputStream());
+        OutputStream out = cs.getOutputStream();
 
-
-
-        ds.write(servicoId);
-
-        for(String s : message) {
-            ds.writeChars(s);
+        for (int i = 0; i < message.length(); i++) {
+            out.write((int) message.charAt(i));
         }
+
+
 
         Log.i("UPE", "Escreveu");
 
-        ds.flush();
-        ds.close();
+        out.flush();
+        out.close();
 
         cs.close();
 
+    }
+
+
+    public static void closeConexao() {
+        clientSocket.close();
     }
 }

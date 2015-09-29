@@ -18,8 +18,8 @@
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp">
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
 
     <EditText
         android:layout_width="match_parent"
@@ -58,6 +58,16 @@
         android:hint="@string/senhaTxt"
         android:ems="10"
         android:id="@+id/senha_edt"
+        android:background="@drawable/shape_fields"
+        android:layout_marginTop="10dp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="35sp"
+        android:inputType="text"
+        android:hint="@string/instrumentoTxt"
+        android:ems="10"
+        android:id="@+id/instrumento_edt"
         android:background="@drawable/shape_fields"
         android:layout_marginTop="10dp" />
 
