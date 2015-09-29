@@ -1,4 +1,4 @@
-package com.montandoagaragem.util;
+package lab.emerson.iae.util;
 
 
 /**
@@ -8,8 +8,8 @@ package com.montandoagaragem.util;
 public class URL {
 
     public class IP {
-        public static final String IP_DNS = "192.168.25.74";
-        public static final String ENDERECO_SERVIDOR_A = "192.168.25.74";
+        public static final String IP_DNS = "192.168.25.11";
+        public static final String ENDERECO_SERVIDOR_A = "localhost";
 
     }
 
@@ -19,7 +19,6 @@ public class URL {
     }
 
     public class PROCESSO {
-        public static final String PROCESSO_A = "CADASTRARUSUARIO";
-
+        public static final String PROCESS_A = "CADASTRARUSUARIO";
     }
 }
