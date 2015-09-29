@@ -19,4 +19,5 @@
     <string name="cadastraseTxt">Cadastre-se</string>
 
     <string name="cadastrarTxt">Cadastrar</string>
+    <string name="title_activity_consulta">Consulta</string>
 </resources>
