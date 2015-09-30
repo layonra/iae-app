@@ -53,7 +53,7 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
         final EditText genero = (EditText) findViewById(R.id.genero_edt);
         final EditText subGenero = (EditText) findViewById(R.id.sub_genero_edt);
         final EditText cidade = (EditText) findViewById(R.id.cidade_edt);
-        final EditText bairro = (EditText) findViewById(R.id.estado_edt);
+        final EditText bairro = (EditText) findViewById(R.id.bairro_edt);
 
         Button cadastrar = (Button) findViewById(R.id.cadastrar_button);
 
