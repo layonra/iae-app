@@ -7,7 +7,6 @@ import com.montandoagaragem.entity.Usuario;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.io.Serializable;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -28,7 +27,7 @@ public class SocketManagement implements Serializable {
         //Prepara o socket para o envio de dados pela porta indicada
         clientSocket = new DatagramSocket();
         InetAddress IPAddress = InetAddress.getByName(ip);
-        byte[] sendData = new byte[1024];
+        byte[] sendData;
         byte[] receiveData = new byte[1024];
 
         //Prepara e envia o pacote de dados
@@ -53,6 +52,7 @@ public class SocketManagement implements Serializable {
     }
 
 
+    /*
     public static void sendDataTCP (Object object, String ip, int porta) throws IOException {
 
         Socket cs = new Socket(ip, porta);
@@ -78,11 +78,11 @@ public class SocketManagement implements Serializable {
 
         Log.i("UPE", "Depois do for");
         cs.close();
-        */
 
-    }
 
-    public static Usuario sendDataTCP (String message, String ip, int porta) throws IOException, UsuarioInexistenteException {
+    }*/
+
+    public static Usuario sendDataTCP (Object object, String ip, int porta) throws IOException, UsuarioInexistenteException {
 
         Log.i("UPE", "Entrou no método");
 
@@ -93,18 +93,7 @@ public class SocketManagement implements Serializable {
         ObjectInputStream obj = new ObjectInputStream(cs.getInputStream());
 
         try {
-
-            String[] s = message.split(";");
-
-            String email = s[0];
-            String senha = s[1];
-
-            Usuario u = new Usuario();
-
-            u.setEmail(email);
-            u.setSenha(senha);
-
-            out.writeObject(u);
+            out.writeObject(object);
             Log.i("UPE", "Escreveu");
             usuario = (Usuario) obj.readObject();
 

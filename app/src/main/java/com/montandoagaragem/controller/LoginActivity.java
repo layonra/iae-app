@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.montandoagaragem.R;
 import com.montandoagaragem.dao.TabelaServicoDAO;
 import com.montandoagaragem.entity.TabelaServico;
+import com.montandoagaragem.entity.Usuario;
 import com.montandoagaragem.util.ServicoInexistenteException;
 import com.montandoagaragem.util.SocketManagement;
 import com.montandoagaragem.util.TimeoutThread;
@@ -24,6 +25,8 @@ import java.io.IOException;
 public class LoginActivity extends AppCompatActivity {
 
     private static int count = 0;
+
+    private static Usuario usuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,12 +110,16 @@ public class LoginActivity extends AppCompatActivity {
 
                         tabelaServicoDAO.getConnectionInstance(getApplicationContext());
 
+                        Usuario u = new Usuario();
+
+                        u.setEmail(email);
+                        u.setSenha(senha);
                         try {
                             tabelaServicoDAO.buscar(URL.PROCESSO.PROCESSO_B);
 
                             tabelaServicoDAO.getConnectionInstance(getApplicationContext());
                             tabelaServicoDAO.editar(ts);
-                            SocketManagement.sendDataTCP(email + ";" + senha, ts.getIp(), ts.getPorta());
+                            usuario = SocketManagement.sendDataTCP(u, ts.getIp(), ts.getPorta());
                             Log.i("UPE", "Editou!");
 
                         }catch (ServicoInexistenteException e) {
@@ -120,9 +127,9 @@ public class LoginActivity extends AppCompatActivity {
                             tabelaServicoDAO.inserir(ts);
 
                             try {
-                                SocketManagement.sendDataTCP(email + ";" + senha, ts.getIp(), ts.getPorta());
-
-                            }catch (UsuarioInexistenteException u) {
+                              usuario = SocketManagement.sendDataTCP(u, ts.getIp(), ts.getPorta());
+                                return "sucess";
+                            }catch (UsuarioInexistenteException err) {
                                 return "Usuario inexistente";
                             }
                         } catch (UsuarioInexistenteException e) {
@@ -136,7 +143,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     }
 
-                return data;
+                return "sucess";
             }
 
             @Override
@@ -146,6 +153,11 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(getBaseContext(), "Sem conexão com o servidor. Tente novamente", Toast.LENGTH_SHORT).show();
                 } else if(s.equals("Usuario Inexistente")) {
                     Toast.makeText(getBaseContext(), "Usuário inexistente no sistema!", Toast.LENGTH_SHORT).show();
+                }
+
+                if (s.equals("sucess")) {
+                    Intent it = new Intent(LoginActivity.this, Consulta.class);
+                    startActivity(it);
                 }
             }
         };
@@ -163,11 +175,12 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             protected String doInBackground(Void... params) {
-
-                String data = "";
                 try {
 
-                    SocketManagement.sendDataTCP(email + ";" + senha, tabelaServico.getIp(), tabelaServico.getPorta());
+                    Usuario u = new Usuario();
+                    u.setEmail(email);
+                    u.setSenha(senha);
+                    usuario = SocketManagement.sendDataTCP(u,tabelaServico.getIp(), tabelaServico.getPorta());
 
                 } catch (IOException e) {
                     return "Error";
@@ -176,7 +189,7 @@ public class LoginActivity extends AppCompatActivity {
                     return "Usuario Inexistente";
                 }
 
-                return data;
+                return "sucess";
             }
             @Override
             protected void onPostExecute(String s) {
@@ -192,10 +205,26 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(getBaseContext(), "Usuário inexistente no sistema!", Toast.LENGTH_SHORT).show();
                 }
 
+                if (s.equals("sucess")) {
+                    Intent it = new Intent(LoginActivity.this, Consulta.class);
+                    startActivity(it);
+                }
+
             }
         };
 
         task.execute();
 
+    }
+
+    public static Usuario getUsuario() {
+        if (usuario == null) {
+            usuario = new Usuario();
+        }
+        return usuario;
+    }
+
+    public static void setUsuario(Usuario u) {
+        usuario = u;
     }
 }

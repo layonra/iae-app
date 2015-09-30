@@ -1,6 +1,7 @@
 package com.montandoagaragem.controller;
 
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +23,7 @@ import com.montandoagaragem.util.ServicoInexistenteException;
 import com.montandoagaragem.util.SocketManagement;
 import com.montandoagaragem.util.TimeoutThread;
 import com.montandoagaragem.util.URL;
+import com.montandoagaragem.util.UsuarioInexistenteException;
 
 public class CadastrarUsuarioActivity extends AppCompatActivity {
 
@@ -119,31 +121,46 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
 
                     Log.i("UPE", data);
 
-                        String[] s = data.split(":");
-                        String ip = s[0];
-                        String p = s[1];
-                        int porta = Integer.parseInt(p);
+                    String[] s = data.split(":");
+                    String ip = s[0];
+                    String p = s[1];
+                    int porta = Integer.parseInt(p);
 
-                        TabelaServico ts = new TabelaServico(URL.PROCESSO.PROCESSO_A, ip, porta);
+                    TabelaServico ts = new TabelaServico(URL.PROCESSO.PROCESSO_A, ip, porta);
 
-                        TabelaServicoDAO tabelaServicoDAO = new TabelaServicoDAO();
+                    TabelaServicoDAO tabelaServicoDAO = new TabelaServicoDAO();
 
-                        tabelaServicoDAO.getConnectionInstance(getApplicationContext());
+                    tabelaServicoDAO.getConnectionInstance(getApplicationContext());
+
+                    LoginActivity.getUsuario();
+
+                    Usuario u;
 
                         try {
                             tabelaServicoDAO.buscar(URL.PROCESSO.PROCESSO_A);
 
                             tabelaServicoDAO.getConnectionInstance(getApplicationContext());
                             tabelaServicoDAO.editar(ts);
-                            SocketManagement.sendDataTCP(usuario, ip, porta);
+
+                            u = SocketManagement.sendDataTCP(usuario, ip, porta);
+                            LoginActivity.setUsuario(u);
+
                             Log.i("UPE", "Editou!");
 
                         } catch (ServicoInexistenteException e) {
                             tabelaServicoDAO.inserir(ts);
-                            SocketManagement.sendDataTCP(usuario, ip, porta);
+                            try {
+                                u = SocketManagement.sendDataTCP(usuario, ip, porta);
+                                LoginActivity.setUsuario(u);
+                                return "sucess";
+                            } catch (UsuarioInexistenteException e1) {
+                                return "Error";
+                            }
+                        } catch (UsuarioInexistenteException e) {
+                           return "Error";
                         }
 
-                        Log.i("UPE", p + "");
+                    Log.i("UPE", p + "");
 
 
                     }catch(IOException e){
@@ -151,7 +168,7 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
                     }
 
 
-                return data;
+                return "sucess";
             }
 
             @Override
@@ -160,6 +177,11 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
                 if(s.equals("Error")) {
                     Log.i("UPE", s);
                     Toast.makeText(getBaseContext(), "Sem conexão com o servidor. Tente novamente", Toast.LENGTH_SHORT).show();
+                }
+
+                if (s.equals("sucess")) {
+                    Intent it = new Intent(CadastrarUsuarioActivity.this, Consulta.class);
+                    startActivity(it);
                 }
 
             }
@@ -178,16 +200,21 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
             @Override
             protected String doInBackground(Void... params) {
 
-                String data = "";
+
                 try {
 
-                    SocketManagement.sendDataTCP(usuario, tabelaServico.getIp(), tabelaServico.getPorta());
+                    LoginActivity.getUsuario();
+                    Usuario u = SocketManagement.sendDataTCP(usuario, tabelaServico.getIp(), tabelaServico.getPorta());
+
+                    LoginActivity.setUsuario(u);
 
                 } catch (IOException e) {
                     return "Error";
+                } catch (UsuarioInexistenteException e) {
+                    return "Error";
                 }
 
-                return data;
+                return "sucess";
             }
 
             @Override
@@ -200,8 +227,11 @@ public class CadastrarUsuarioActivity extends AppCompatActivity {
                         Log.i("UPE", "Mais de três vezes");
                         cadastrarUsuario(usuario);
                     }
-                } else {
-                    Toast.makeText(getBaseContext(), s, Toast.LENGTH_SHORT).show();
+                }
+
+                if (s.equals("sucess")) {
+                    Intent it = new Intent(CadastrarUsuarioActivity.this, Consulta.class);
+                    startActivity(it);
                 }
             }
         };
