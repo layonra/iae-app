@@ -13,7 +13,7 @@
     <string name="generoTxt">Gênero</string>
     <string name="subGeneroTxt">Subgênero</string>
     <string name="cidadeTxt">Cidade</string>
-    <string name="estadoTxt">Estado</string>
+    <string name="bairroTxt">Bairro</string>
 
     <string name="entrarTxt">Entrar</string>
     <string name="cadastraseTxt">Cadastre-se</string>

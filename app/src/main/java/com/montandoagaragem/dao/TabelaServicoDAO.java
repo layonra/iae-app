@@ -11,8 +11,7 @@ import com.montandoagaragem.entity.TabelaServico;
 import com.montandoagaragem.util.ServicoInexistenteException;
 
 /**
- * Created by Emerson Oliveira on 27/09/15 at 16:21.
- *
+ * Classe responsável por administrar as interações com banco local do smartphone
  */
 public class TabelaServicoDAO {
 

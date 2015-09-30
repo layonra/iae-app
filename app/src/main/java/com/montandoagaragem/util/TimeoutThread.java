@@ -2,10 +2,8 @@ package com.montandoagaragem.util;
 
 import android.util.Log;
 
-
 /**
- * Created by Emerson Oliveira on 29/09/15 at 14:38.
- *
+ * Thread adormece por 5 segundos. Caso uma resposta não seja obtida do servidor de nomes a conexão é cancelada
  */
 public class TimeoutThread implements Runnable {
 

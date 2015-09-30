@@ -14,10 +14,7 @@ import com.montandoagaragem.entity.Usuario;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by layon on 29/09/15.
- *
- */
+
 public class AdapterListView extends BaseAdapter {
 
     private LayoutInflater mInflater;
@@ -59,7 +56,7 @@ public class AdapterListView extends BaseAdapter {
         view = mInflater.inflate(R.layout.item_listview, null);
 
         ((TextView) view.findViewById(R.id.txt_nome)).setText(u.getNome());
-        ((TextView) view.findViewById(R.id.txt_cidade)).setText(u.getCidade());
+        ((TextView) view.findViewById(R.id.txt_cidade)).setText(u.getEmail());
         ((TextView) view.findViewById(R.id.txt_instrumento)).setText(u.getInstrumento());
 
         return view;

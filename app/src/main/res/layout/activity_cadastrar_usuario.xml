@@ -105,8 +105,8 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="35sp"
-        android:id="@+id/estado_edt"
-        android:hint="@string/estadoTxt"
+        android:id="@+id/bairro_edt"
+        android:hint="@string/bairroTxt"
         android:background="@drawable/shape_fields"
         android:ems="10"
         android:layout_marginTop="10dp" />

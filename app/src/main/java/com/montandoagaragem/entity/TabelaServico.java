@@ -1,9 +1,5 @@
 package com.montandoagaragem.entity;
 
-/**
- * Created by Emerson Oliveira on 27/09/15 at 16:23.
- *
- */
 public class TabelaServico {
 
     private long id;

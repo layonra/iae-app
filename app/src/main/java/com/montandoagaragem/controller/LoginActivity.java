@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -62,20 +61,32 @@ public class LoginActivity extends AppCompatActivity {
                     count = 0;
 
                     try {
+                        //Instancia um objeto da tabela de serviços que carrega os dados da conexão (IP, porta, Serviço)
                         TabelaServicoDAO tabelaServicoDAO = new TabelaServicoDAO();
 
+                        //Pega o contexto da aplicação
                         tabelaServicoDAO.getConnectionInstance(getApplicationContext());
 
+                        //Busca a existência do processo no banco
                         TabelaServico ts = tabelaServicoDAO.buscar(URL.PROCESSO.PROCESSO_B);
+
+                        //Conexão direta com o servidor
                         logar(email.getText().toString(), senha.getText().toString(), ts);
 
                     } catch (ServicoInexistenteException e) {
+                        //Conexão consultando o DNS
                         logar(email.getText().toString(), senha.getText().toString());
                     }
                 }
             }
         });
     }
+
+    /**
+     * Método de consulta ao servidor de nomes
+     * @param email email do usuario
+     * @param senha senha
+     */
 
 
     private void logar(final String email, final String senha) {
@@ -89,15 +100,15 @@ public class LoginActivity extends AppCompatActivity {
 
                     try {
 
+                        //Thread de timeout encerra a conexão quando passa até 5 segundos sem resposta
                         TimeoutThread timeoutThread = new TimeoutThread();
 
                         Thread t = new Thread(timeoutThread);
 
                         t.start();
+
+                        //Consulta quem possuí o processo no servidor de nomes
                         data = SocketManagement.sendDataUDP(URL.PROCESSO.PROCESSO_B, URL.IP.IP_DNS, URL.PORTA.PORTA_DNS);
-
-                        Log.i("UPE", data);
-
 
                         String[] s = data.split(":");
                         String ip = s[0];
@@ -115,28 +126,30 @@ public class LoginActivity extends AppCompatActivity {
                         u.setEmail(email);
                         u.setSenha(senha);
                         try {
+                            //Busca processo no banco
                             tabelaServicoDAO.buscar(URL.PROCESSO.PROCESSO_B);
 
                             tabelaServicoDAO.getConnectionInstance(getApplicationContext());
+
+                            //Se já existir atualiza
                             tabelaServicoDAO.editar(ts);
+                            //Conexão com o servidor
                             usuario = SocketManagement.sendDataTCP(u, ts.getIp(), ts.getPorta());
-                            Log.i("UPE", "Editou!");
 
                         }catch (ServicoInexistenteException e) {
-
+                            //Se o processo não existir, insere e faz a conexão com o servidor
                             tabelaServicoDAO.inserir(ts);
 
                             try {
                               usuario = SocketManagement.sendDataTCP(u, ts.getIp(), ts.getPorta());
                                 return "sucess";
                             }catch (UsuarioInexistenteException err) {
+                                //Captura as exeções e retorna para o usario como mensagens de erro
                                 return "Usuario inexistente";
                             }
                         } catch (UsuarioInexistenteException e) {
                             return "Usuario Inexistente";
                         }
-
-                        Log.i("UPE", p + "");
 
                     } catch (IOException e) {
                             return "Error";
@@ -156,7 +169,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 if (s.equals("sucess")) {
-                    Intent it = new Intent(LoginActivity.this, Consulta.class);
+                    Intent it = new Intent(LoginActivity.this, ConsultaActivity.class);
                     startActivity(it);
                 }
             }
@@ -167,6 +180,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Método não consulta o servidor de nomes
+     * @param email email
+     * @param senha senha
+     * @param tabelaServico tabela de armazemanto dos dados do serviço: IP, porta;
+     */
     private void logar (final String email, final String senha, final TabelaServico tabelaServico) {
 
         count ++;
@@ -175,6 +194,8 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             protected String doInBackground(Void... params) {
+
+               String data = "err";
                 try {
 
                     Usuario u = new Usuario();
@@ -182,14 +203,17 @@ public class LoginActivity extends AppCompatActivity {
                     u.setSenha(senha);
                     usuario = SocketManagement.sendDataTCP(u,tabelaServico.getIp(), tabelaServico.getPorta());
 
+                    if (usuario != null) {
+                        data = "sucess";
+                    }
+
                 } catch (IOException e) {
                     return "Error";
                 } catch (UsuarioInexistenteException e) {
-                    Log.i("UPE", e.getMessage());
                     return "Usuario Inexistente";
                 }
 
-                return "sucess";
+                return data;
             }
             @Override
             protected void onPostExecute(String s) {
@@ -198,15 +222,16 @@ public class LoginActivity extends AppCompatActivity {
                     if(count < 2) {
                         logar(email, senha, tabelaServico);
                     } else {
-                        Log.i("UPE", "Mais de três vezes");
                         logar(email, senha);
                     }
                 } else if(s.equals("Usuario Inexistente")) {
                     Toast.makeText(getBaseContext(), "Usuário inexistente no sistema!", Toast.LENGTH_SHORT).show();
+                } else if(s.equals("err")) {
+                    Toast.makeText(getBaseContext(), "Usuário inválido", Toast.LENGTH_SHORT).show();
                 }
 
                 if (s.equals("sucess")) {
-                    Intent it = new Intent(LoginActivity.this, Consulta.class);
+                    Intent it = new Intent(LoginActivity.this, ConsultaActivity.class);
                     startActivity(it);
                 }
 
@@ -216,6 +241,7 @@ public class LoginActivity extends AppCompatActivity {
         task.execute();
 
     }
+
 
     public static Usuario getUsuario() {
         if (usuario == null) {

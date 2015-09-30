@@ -26,7 +26,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".controller.Consulta"
+            android:name=".controller.ConsultaActivity"
             android:label="@string/title_activity_consulta" >
         </activity>
     </application>
