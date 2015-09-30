@@ -17,7 +17,6 @@ public class Usuario implements Serializable {
 	private String bairro;
 
 	public Usuario() {
-
 	}
 
 	public Usuario(String nome, String telefone, String email, String senha, String instrumento, String genero, String subGenero, String cidade, String bairro) {

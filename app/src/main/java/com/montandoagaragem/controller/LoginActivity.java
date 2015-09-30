@@ -172,6 +172,7 @@ public class LoginActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     return "Error";
                 } catch (UsuarioInexistenteException e) {
+                    Log.i("UPE", e.getMessage());
                     return "Usuario Inexistente";
                 }
 

@@ -89,28 +89,34 @@ public class SocketManagement implements Serializable {
         Socket cs = new Socket(ip, porta);
         Usuario usuario;
 
-        OutputStream out = cs.getOutputStream();
+        ObjectOutputStream out = new ObjectOutputStream(cs.getOutputStream());
         ObjectInputStream obj = new ObjectInputStream(cs.getInputStream());
 
-        for (int i = 0; i < message.length(); i++) {
-            out.write((int) message.charAt(i));
-        }
-
-        Log.i("UPE", "Escreveu");
-
-        out.flush();
-        out.close();
-
         try {
+
+            String[] s = message.split(";");
+
+            String email = s[0];
+            String senha = s[1];
+
+            Usuario u = new Usuario();
+
+            u.setEmail(email);
+            u.setSenha(senha);
+
+            out.writeObject(u);
+            Log.i("UPE", "Escreveu");
             usuario = (Usuario) obj.readObject();
+
+            out.close();
             obj.close();
+            cs.close();
 
             Log.i("UPE", usuario + "");
         } catch (ClassNotFoundException e) {
+            Log.i("UPE", "Caiu no catch");
             throw new UsuarioInexistenteException();
         }
-
-        cs.close();
 
         return usuario;
     }
